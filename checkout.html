@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checkout - SHOPPY</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      margin: 0;
+    }
+
+    header {
+      background: green;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .section {
+      background: white;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+    }
+
+    .confirm {
+      background: green;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h2>Checkout 💳</h2>
+</header>
+
+<!-- ADDRESS -->
+<div class="section">
+  <h3>📍 Delivery Address</h3>
+  <input type="text" id="address" placeholder="Enter your location">
+</div>
+
+<!-- DELIVERY -->
+<div class="section">
+  <h3>🚚 Delivery Option</h3>
+  <select id="delivery">
+    <option>Home Delivery</option>
+    <option>Pickup Station</option>
+  </select>
+</div>
+
+<!-- PAYMENT -->
+<div class="section">
+  <h3>💰 Payment Method</h3>
+  <select id="payment">
+    <option>M-Pesa</option>
+    <option>Cash on Delivery</option>
+    <option>Card</option>
+  </select>
+</div>
+
+<!-- CONFIRM -->
+<div class="confirm" onclick="confirmOrder()">
+  Confirm Order ✅
+</div>
+
+<script>
+async function confirmOrder() {
+  const address = document.getElementById("address").value;
+  const delivery = document.getElementById("delivery").value;
+  const payment = document.getElementById("payment").value;
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  if (!address) {
+    alert("Enter address");
+    return;
+  }
+
+  const order = {
+    items: cart,
+    address,
+    delivery,
+    payment,
+    user: localStorage.getItem("user")
+  };
+
+  const res = await fetch("/create-order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(order)
+  });
+
+  const data = await res.text();
+
+  alert(data);
+
+  localStorage.removeItem("cart");
+}
+
+
+  // Clear cart after order
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+// Convert cart items into orders
+cart.forEach(item => {
+  orders.push({
+    name: item.name,
+    price: item.price,
+    status: "Processing"
+  });
+});
+
+localStorage.setItem("orders", JSON.stringify(orders));
+localStorage.removeItem("cart");
+}
+</script>
+
+</body>
+</html>

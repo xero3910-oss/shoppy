@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SHOPPY - Login</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      text-align: center;
+    }
+
+    .container {
+      width: 300px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      margin-top: 50px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px gray;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 5px;
+    }
+
+    button {
+      width: 95%;
+      padding: 10px;
+      margin: 5px;
+      border: none;
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SHOPPY - Login</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      text-align: center;
+    }
+
+    .container {
+      width: 300px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      margin-top: 50px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px gray;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 5px;
+    }
+
+    button {
+      width: 95%;
+      padding: 10px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .signup { background: green; color: white; }
+    .login { background: blue; color: white; }
+    .google { background: red; color: white; }
+    .facebook { background: #1877f2; color: white; }
+
+    .toggle {
+      color: blue;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h2 id="title">Sign Up</h2>
+
+  <!-- SIGN UP FORM -->
+  <div id="signupForm">
+    <input type="text" placeholder="Full Name"><br>
+    <input type="email" placeholder="Email"><br>
+    <input type="password" placeholder="Password"><br>
+<button class="signup" onclick="signup()">Sign Up</button>
+  </div>
+
+  <!-- LOGIN FORM -->
+  <div id="loginForm" style="display:none;">
+    <input type="email" placeholder="Email"><br>
+    <input type="password" placeholder="Password"><br>
+<button class="login" onclick="login()">Login</button>
+  </div>
+
+  <hr>
+
+  <!-- SOCIAL LOGIN -->
+  <button class="google">Continue with Google</button>
+  <button class="facebook">Continue with Facebook</button>
+
+  <p class="toggle" onclick="toggleForm()">Switch to Login</p>
+
+</div>
+<script>
+let isLogin = false;
+
+function toggleForm() {
+  isLogin = !isLogin;
+
+  document.getElementById("signupForm").style.display = isLogin ? "none" : "block";
+  document.getElementById("loginForm").style.display = isLogin ? "block" : "none";
+  document.getElementById("title").innerText = isLogin ? "Login" : "Sign Up";
+
+  document.querySelector(".toggle").innerText =
+    isLogin ? "Switch to Sign Up" : "Switch to Login";
+}
+
+// SIGNUP FUNCTION
+
+async function signup() {
+  const inputs = document.querySelectorAll("#signupForm input");
+
+  const name = inputs[0].value;
+  const email = inputs[1].value;
+  const password = inputs[2].value;
+
+  const res = await fetch("/signup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, password })
+  });
+
+  const data = await res.text();
+  alert(data);
+}
+// LOGIN FUNCTION
+async function login() {
+  const inputs = document.querySelectorAll("#loginForm input");
+
+  const email = inputs[0].value;
+  const password = inputs[1].value;
+
+  const res = await fetch("/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password })
+  });
+
+  const data = await res.text();
+
+  if (data === "Login successful") {
+    localStorage.setItem("user", email);
+    window.location.href = "/home.html";
+  } else {
+    alert(data);
+  }
+}
+
+</script>
+
+
+</body>
+</html>

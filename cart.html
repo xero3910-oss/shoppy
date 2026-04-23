@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cart - SHOPPY</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      margin: 0;
+    }
+
+    header {
+      background: green;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .cart-item {
+      background: white;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .controls button {
+      padding: 5px 10px;
+      margin: 5px;
+    }
+
+    .checkout {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: green;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h2>Your Cart 🛒</h2>
+</header>
+
+<div id="cartList"></div>
+
+<div class="checkout" onclick="checkout()">
+  Proceed to Checkout 💳
+</div>
+
+<script>
+
+// TEMP CART DATA
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// DISPLAY CART
+function displayCart() {
+  const container = document.getElementById("cartList");
+  container.innerHTML = "";
+
+  cart.forEach((item, index) => {
+    container.innerHTML += `
+      <div class="cart-item">
+        <h3>${item.name}</h3>
+        <p>KSh ${item.price}</p>
+
+        <div class="controls">
+          <button onclick="changeQty(${index}, -1)">➖</button>
+          ${item.qty}
+          <button onclick="changeQty(${index}, 1)">➕</button>
+        </div>
+
+        <button onclick="removeItem(${index})">❌ Remove</button>
+      </div>
+    `;
+  });
+}
+
+// CHANGE QUANTITY
+function changeQty(index, change) {
+  cart[index].qty += change;
+
+  if (cart[index].qty <= 0) {
+    cart.splice(index, 1);
+  }
+
+  saveCart();
+}
+
+// REMOVE ITEM
+function removeItem(index) {
+  cart.splice(index, 1);
+  saveCart();
+}
+
+// SAVE + REFRESH
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  displayCart();
+}
+
+// CHECKOUT
+function checkout() {
+  window.location.href = "/checkout.html";
+}
+
+displayCart();
+
+</script>
+
+</body>
+</html>

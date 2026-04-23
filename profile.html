@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Account - SHOPPY</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      margin: 0;
+    }
+
+    header {
+      background: green;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .profile {
+      text-align: center;
+      background: white;
+      padding: 20px;
+    }
+
+    .section {
+      background: white;
+      margin: 10px;
+      padding: 15px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .section:hover {
+      background: #eee;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h2>My Account 👤</h2>
+</header>
+
+<!-- PROFILE -->
+<div class="profile">
+  <h3 id="username">User Name</h3>
+  <p id="email">user@email.com</p>
+</div>
+
+<!-- SECTIONS -->
+<div class="section" onclick="goOrders()">
+  📦 My Orders
+</div>
+
+<div class="section" onclick="editAccount()">
+  🧾 My Account Details
+</div>
+
+<div class="section" onclick="savedAddresses()">
+  🏠 Saved Addresses
+</div>
+
+<div class="section" onclick="paymentMethods()">
+  💳 Payment Methods
+</div>
+<div class="section" onclick="openHelp()">
+  💬 Help & Customer Service
+</div>
+<script>
+function openHelp() {
+  window.location.href = "/help.html";
+}
+</script>
+<script>
+
+// TEMP USER DATA (later from backend)
+const user = {
+  name: "John Doe",
+  email: "john@email.com"
+};
+
+// LOAD USER
+document.getElementById("username").innerText = user.name;
+document.getElementById("email").innerText = user.email;
+
+// NAVIGATION
+function goOrders() {
+  window.location.href = "/orders.html";
+}
+
+function editAccount() {
+  alert("Edit account details coming soon");
+}
+
+function savedAddresses() {
+  alert("Saved addresses coming soon");
+}
+
+function paymentMethods() {
+  alert("Payment methods coming soon");
+}
+
+</script>
+
+</body>
+</html>

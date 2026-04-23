@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Notifications - SHOPPY</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      margin: 0;
+    }
+
+    header {
+      background: green;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .notification {
+      background: white;
+      margin: 10px;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .type {
+      font-weight: bold;
+    }
+
+    .order { color: blue; }
+    .promo { color: green; }
+    .flash { color: orange; }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h2>Notifications 🔔</h2>
+</header>
+
+<div id="notificationList"></div>
+
+<script>
+
+// TEMP NOTIFICATIONS (later from backend)
+let notifications = JSON.parse(localStorage.getItem("notifications")) || [
+
+  { type: "order", text: "Your order has been shipped 📦" },
+  { type: "promo", text: "Get 20% off on electronics 🎯" },
+  { type: "flash", text: "Flash Sale! Limited time deals ⚡" }
+
+];
+
+// DISPLAY
+function showNotifications() {
+  const container = document.getElementById("notificationList");
+  container.innerHTML = "";
+
+  notifications.forEach(n => {
+    container.innerHTML += `
+      <div class="notification">
+        <p class="type ${n.type}">${n.type.toUpperCase()}</p>
+        <p>${n.text}</p>
+      </div>
+    `;
+  });
+}
+
+showNotifications();
+
+</script>
+
+</body>
+</html>
