@@ -84,6 +84,8 @@ app.get("/orders/:email", (req, res) => {
 });
 
 // START SERVER
-app.listen(3000, () => {
-  console.log("SHOPPY REAL backend running 🚀");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
 });
