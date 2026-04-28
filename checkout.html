@@ -117,7 +117,29 @@ async function confirmOrder() {
   // Clear cart after order
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let orders = JSON.parse(localStorage.getItem("orders")) || [];
+async function confirmOrder() {
+  const user = auth.currentUser;
 
+  if (!user) {
+    alert("Please login first");
+    return;
+  }
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  for (let item of cart) {
+    await db.collection("orders").add({
+      userId: user.uid,
+      name: item.name,
+      price: item.price,
+      status: "Processing",
+      createdAt: new Date()
+    });
+  }
+
+  localStorage.removeItem("cart");
+  alert("Order saved!");
+}
 // Convert cart items into orders
 cart.forEach(item => {
   orders.push({

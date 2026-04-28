@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Orders - SHOPPY</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      margin: 0;
+    }
+
+    header {
+      background: green;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .order {
+      background: white;
+      margin: 10px;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .status {
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .processing { color: orange; }
+    .shipped { color: blue; }
+    .delivered { color: green; }
+
+    button {
+      margin-top: 10px;
+      padding: 8px;
+      border: none;
+      background: green;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .empty {
+      text-align: center;
+      margin-top: 20px;
+      color: gray;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h2>My Orders 📦</h2>
+</header>
+
+<div id="ordersList"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+
+<script>
+
+// 🔥 YOUR FIREBASE CONFIG HERE
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAFp78wSh5bmiBTwpW4NDrbkhTG6hY2avk",
+  authDomain: "shoppy-d5a7b.firebaseapp.com",
+  databaseURL: "https://shoppy-d5a7b-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "shoppy-d5a7b",
+  storageBucket: "shoppy-d5a7b.firebasestorage.app",
+  messagingSenderId: "778319758318",
+  appId: "1:778319758318:web:0b8540bba1db86fb7f04ff",
+  measurementId: "G-4ZV0ZTXT92"
+};
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// LOAD ORDERS
+auth.onAuthStateChanged(async (user) => {
+  const container = document.getElementById("ordersList");
+  container.innerHTML = "";
+
+  if (!user) {
+    container.innerHTML = "<p class='empty'>Please login to see orders</p>";
+    return;
+  }
+
+  const snapshot = await db.collection("orders")
+    .where("userId", "==", user.uid)
+    .orderBy("createdAt", "desc")
+    .get();
+
+  if (snapshot.empty) {
+    container.innerHTML = "<p class='empty'>No orders yet</p>";
+    return;
+  }
+
+  snapshot.forEach(doc => {
+    const order = doc.data();
+
+    container.innerHTML += `
+      <div class="order">
+        <h3>${order.name}</h3>
+        <p>KSh ${order.price}</p>
+
+        <p class="status ${order.status.toLowerCase()}">
+          Status: ${order.status}
+        </p>
+
+        <button onclick="trackOrder('${order.status}')">
+          Track Order
+        </button>
+      </div>
+    `;
+  });
+});
+
+// TRACK ORDER
+function trackOrder(status) {
+  alert("Current Status: " + status);
+}
+
+</script>
+
+</body>
+</html>
